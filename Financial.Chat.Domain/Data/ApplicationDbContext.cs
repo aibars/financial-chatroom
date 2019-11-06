@@ -9,6 +9,9 @@ namespace Financial.Chat.Domain.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
+
         }
+
+        public DbSet<Message> Messages { get; set; }
     }
 }
