@@ -1,4 +1,4 @@
-﻿using Financial.Chat.Domain.Data;
+﻿using Financial.Chat.Domain.Models;
 using Financial.Chat.Logic.Models;
 
 namespace Financial.Chat.Logic.Interface

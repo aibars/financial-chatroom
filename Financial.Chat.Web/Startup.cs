@@ -1,27 +1,64 @@
+using AutoMapper;
+using Financial.Chat.Domain.Data;
+using Financial.Chat.Domain.Models;
+using Financial.Chat.Logic;
+using Financial.Chat.Logic.Interface;
+using Financial.Chat.Providers;
+using Financial.Chat.Providers.Interface;
+using Financial.Chat.Web.Mappings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace multiroom_chat
+namespace Financial.Chat.Web
 {
     public class Startup
     {
+        public static string ConnectionString { get; private set; }
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
-        }
+            var builder = new ConfigurationBuilder()
+                                .AddJsonFile("appSettings.json")
+                                .AddEnvironmentVariables();
 
-        public IConfiguration Configuration { get; }
+            Configuration = builder.Build();
+
+            ConnectionString = Configuration["ConnectionStrings:DefaultConnection"];
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddScoped<IDatabaseProvider, DatabaseProvider>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddDbContext<ApplicationDbContext>(options =>
+             options.UseNpgsql(ConnectionString));
+            services.AddScoped<IChatManager, ChatManager>();
+
+            services.AddIdentity<ApplicationUser, AppRole>(config => { })
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders()
+                .AddUserManager<UserManager<ApplicationUser>>();
+
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mappingConfig.CreateMapper();
+
+            services.AddSingleton(mapper);
+
+            services.Configure<Logic.Models.TokenOptions>(Configuration.GetSection("TokenOptions"));
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

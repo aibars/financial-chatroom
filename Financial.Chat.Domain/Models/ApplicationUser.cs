@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 
-namespace Financial.Chat.Domain.Data
+namespace Financial.Chat.Domain.Models
 {
     public class ApplicationUser : IdentityUser<Guid>
     {

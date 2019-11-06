@@ -1,4 +1,4 @@
-﻿using Financial.Chat.Domain.Data;
+﻿using Financial.Chat.Domain.Models;
 using Financial.Chat.Logic.Interface;
 using Financial.Chat.Logic.Models;
 using Microsoft.Extensions.Options;
@@ -27,7 +27,7 @@ namespace Financial.Chat.Logic
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.Email)
+                    new Claim(ClaimTypes.Name, user.UserName)
                 }),
                 Expires = DateTime.UtcNow.AddDays(Convert.ToDouble(_configuration.Value.ExpirationDays)),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),

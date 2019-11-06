@@ -1,9 +1,8 @@
 using AutoMapper;
 using Financial.Chat.Domain.ApiModels.Request;
 using Financial.Chat.Domain.ApiModels.Response;
-using Financial.Chat.Domain.Data;
+using Financial.Chat.Domain.Models;
 using Financial.Chat.Logic.Interface;
-using Financial.Chat.Providers.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +10,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Southapps.Aqui.API.Controllers
+namespace Financial.Chat.Web
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -19,19 +18,16 @@ namespace Southapps.Aqui.API.Controllers
     {
         protected readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        protected readonly IDatabaseProvider _databaseProvider;
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
         
         public AccountController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IDatabaseProvider databaseProvider,
             IMapper mapper,
             ITokenService tokenService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _databaseProvider = databaseProvider;
             _mapper = mapper;
             _tokenService = tokenService;
         }
@@ -40,11 +36,11 @@ namespace Southapps.Aqui.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody]LoginRequestDto model)
         {
-            var user = _userManager.Users.SingleOrDefault(r => r.Email == model.UserName);
+            var user = _userManager.Users.SingleOrDefault(r => r.UserName == model.UserName);
 
             if (user == null)
             {
-                ModelState.AddModelError("notExists", "Usuario y/o contraseña incorrectos.");
+                ModelState.AddModelError("notExists", "Username or password are incorrect.");
                 return BadRequest(ModelState);
             }
 
@@ -68,6 +64,31 @@ namespace Southapps.Aqui.API.Controllers
                 returnModel.Token = jsonWebToken.Token;
                 returnModel.Expires = jsonWebToken.Expiration - requestedAt.Ticks;
                 return Ok(returnModel);
+            }
+        }
+
+        [HttpPost("register")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register([FromBody]RegisterRequestDto model)
+        {
+            var appUser = _userManager.Users.SingleOrDefault(r => r.UserName == model.UserName);
+
+            if (appUser != null)
+            {
+                ModelState.AddModelError("exists", "User already exists.");
+                return BadRequest(ModelState);
+            }
+            appUser = _mapper.Map<ApplicationUser>(model);
+            var result = await _userManager.CreateAsync(appUser, model.Password);
+            if (result.Succeeded)
+            {
+                await _signInManager.SignInAsync(appUser, isPersistent: false);
+
+                return Ok(_tokenService.GenerateJwtToken(appUser.UserName, appUser));
+            }
+            else
+            {
+                return BadRequest(result.Errors.First());
             }
         }
     }
