@@ -9,7 +9,5 @@ namespace FinancialChat.Domain.HubModels
         public string Message { get; set; }
 
         public DateTime SendDate { get; set; }
-
-        public int MessageType { get; set; }
     }
 }

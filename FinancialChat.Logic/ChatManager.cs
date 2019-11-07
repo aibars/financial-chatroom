@@ -25,7 +25,7 @@ namespace FinancialChat.Logic
             return response;
         }
 
-        public async Task SaveMessage(MessageModel message, string username)
+        public async Task SaveMessage(string message, string username)
         {
             var user = await _databaseProvider.GetUser(username) ?? throw new ArgumentException("Error obtaining user from the database");
             await _databaseProvider.SaveMessage(user.Id, message);

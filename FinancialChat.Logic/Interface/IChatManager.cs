@@ -5,7 +5,7 @@ namespace FinancialChat.Logic.Interface
 {
     public interface IChatManager
     {
-        Task SaveMessage(MessageModel message, string username);
+        Task SaveMessage(string message, string username);
 
         string GetResponseFromBot(string quote); 
     }

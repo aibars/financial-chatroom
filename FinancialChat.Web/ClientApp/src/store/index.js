@@ -1,15 +1,14 @@
-import { combineReducers } from 'redux';
-
 let user = JSON.parse(localStorage.getItem('user'));
 const initialState = user ? { loggedIn: true, user } : {};
 
 const userConstants = {
-    LOGIN_REQUEST: 'USERS_LOGIN_REQUEST',
-    LOGIN_SUCCESS: 'USERS_LOGIN_SUCCESS',
-    LOGIN_FAILURE: 'USERS_LOGIN_FAILURE',
+  LOGIN_REQUEST: 'USERS_LOGIN_REQUEST',
+  LOGIN_SUCCESS: 'USERS_LOGIN_SUCCESS',
+  LOGIN_FAILURE: 'USERS_LOGIN_FAILURE',
 };
 
 export function authentication(state = initialState, action) {
+  console.log(action.type);
   switch (action.type) {
     case userConstants.LOGIN_REQUEST:
       return {
@@ -17,6 +16,7 @@ export function authentication(state = initialState, action) {
         user: action.user
       };
     case userConstants.LOGIN_SUCCESS:
+      console.log(true);
       return {
         loggedIn: true,
         user: action.user
@@ -27,7 +27,3 @@ export function authentication(state = initialState, action) {
       return state
   }
 }
-
-export const reducers = combineReducers({
-  authentication
-});

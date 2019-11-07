@@ -1,10 +1,8 @@
-﻿using FinancialChat.Domain.HubModels;
-using FinancialChat.Domain.Models;
+﻿using FinancialChat.Domain.Models;
 using FinancialChat.Logic.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
-using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -26,20 +24,18 @@ namespace FinancialChat.Web.Hubs
         /// <summary>
         /// Saves the message into the db and sends it via the SignalR socket
         /// </summary>
-        public async Task Send(MessageModel message)
+        public async Task Send(string message)
         {
             var username = Context.User.Identity.Name;
 
-            message.SendDate = DateTime.UtcNow;
-
-            if (!message.Message.Contains(@"/stock="))
+            if (!message.Contains(@"/stock="))
             {
-                await Clients.All.SendAsync("sendToAll", message);
+                await Clients.All.SendAsync("sendToAll", username, message);
                 await _chatManager.SaveMessage(message, username);
             }
             else
             {
-                var quote = new Regex("/stock=(.+)").Match(message.Message).Groups[0].Value;
+                var quote = new Regex("/stock=(.+)").Match(message).Groups[0].Value;
 
                 var quoteResponse = _chatManager.GetResponseFromBot(quote);
 

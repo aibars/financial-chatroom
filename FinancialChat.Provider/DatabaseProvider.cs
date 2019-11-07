@@ -1,10 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
-using FinancialChat.Domain.Data;
-using FinancialChat.Domain.HubModels;
+﻿using FinancialChat.Domain.Data;
 using FinancialChat.Domain.Models;
 using FinancialChat.Providers.Interface;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Threading.Tasks;
 
 namespace FinancialChat.Providers
 {
@@ -22,12 +21,12 @@ namespace FinancialChat.Providers
                 .FirstOrDefaultAsync(x => x.UserName == username);
         }
 
-        public async Task SaveMessage(Guid senderId, MessageModel message)
+        public async Task SaveMessage(Guid senderId, string message)
         {
             await _context.Messages.AddAsync(new Message
             {
-                Text = message.Message,
-                SendDate = message.SendDate,
+                Text = message,
+                SendDate = DateTime.UtcNow,
                 SenderUserId = senderId
             });
 

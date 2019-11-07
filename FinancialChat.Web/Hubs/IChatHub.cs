@@ -5,7 +5,7 @@ namespace FinancialChat.Web.Hubs
 {
     public interface IChatHub
     {
-        Task Send(MessageModel message);
+        Task Send(string message);
 
         Task OnConnectedAsync();
     }

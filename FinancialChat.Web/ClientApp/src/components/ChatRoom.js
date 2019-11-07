@@ -13,12 +13,16 @@ class ChatRoom extends React.Component {
       messages: [],
       hubConnection: null,
     };
+
+    this.sendMessage = this.sendMessage.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   componentDidMount = () => {
+
     const connection = new signalR.HubConnectionBuilder()
       .withUrl('/chathub', {
-        accessTokenFactory: () => JSON.parse(localStorage.getItem('user')).token
+        accessTokenFactory: () => this.props.user.token
       })
       .configureLogging(signalR.LogLevel.Information)
       .build();
@@ -30,6 +34,7 @@ class ChatRoom extends React.Component {
         .catch(err => console.log('Error while establishing connection.'));
 
       this.state.hubConnection.on('sendToAll', (username, receivedMessage) => {
+        console.log('send method reached');
         const text = `${username}: ${receivedMessage}`;
         const messages = this.state.messages.concat([text]);
         this.setState({ messages });
@@ -37,21 +42,38 @@ class ChatRoom extends React.Component {
     });
   }
 
+
+  handleKeyPress = (e) => {
+    if (e.charCode === 13) {
+      this.sendMessage();
+    }
+  }
+
+  sendMessage = () => {
+    if (this.state.message === '') return;
+    this.state.hubConnection
+      .invoke('send', this.state.message)
+      .catch(err => console.error(err));
+
+    this.setState({ message: '' });
+  };
+
   render() {
     return (
       <div className="chat-input-box">
         <br />
         <input className="login-input"
           type="text"
+          onKeyPress={this.handleKeyPress}
           value={this.state.message}
           onChange={e => this.setState({ message: e.target.value })}
         />
 
         <button className="login-btn chat-send-btn" onClick={this.sendMessage}>Send</button>
-
+        <span className="login-label">Logged in as: <label>{this.props.user.userName}</label></span>
         <div>
           {this.state.messages.map((message, index) => (
-            <span style={{ display: 'block' }} key={index}> {message} </span>
+            <span style={{ display: 'block' }} key={index}>{index + 1}. {message}</span>
           ))}
         </div>
       </div>
@@ -59,5 +81,9 @@ class ChatRoom extends React.Component {
   }
 }
 
-const connectedRoom = connect()(ChatRoom);
+const connectedRoom = connect((state) => {
+  const { authentication } = state;
+  const { user } = authentication;
+  return { user };
+})(ChatRoom);
 export { connectedRoom as ChatRoom };

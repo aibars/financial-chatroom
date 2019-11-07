@@ -72,7 +72,7 @@ class Login extends React.Component {
 }
 
 const mapState = (state) => {
-    console.log(JSON.stringify(state));
+    return {}
 };
 
 const actionCreators = {
