@@ -27,3 +27,9 @@
 .login-label {
   margin-left: 20px;
 }
+
+.logout-label {
+  float: right;
+  margin-top: 20px;
+  margin-right: 20px;
+}

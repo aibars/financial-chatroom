@@ -8,7 +8,6 @@ const userConstants = {
 };
 
 export function authentication(state = initialState, action) {
-  console.log(action.type);
   switch (action.type) {
     case userConstants.LOGIN_REQUEST:
       return {
@@ -16,7 +15,6 @@ export function authentication(state = initialState, action) {
         user: action.user
       };
     case userConstants.LOGIN_SUCCESS:
-      console.log(true);
       return {
         loggedIn: true,
         user: action.user

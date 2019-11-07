@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import * as signalR from '@aspnet/signalr';
+import { Link } from 'react-router-dom';
 import '../styles/ChatRoom.css';
 
 class ChatRoom extends React.Component {
@@ -36,9 +37,11 @@ class ChatRoom extends React.Component {
       this.state.hubConnection.on('sendToAll', (username, receivedMessage) => {
         const text = `${username}: ${receivedMessage}`;
         const messages =
-          this.state.messages.length > 50 ?
-            this.state.messages.slice(this.state.messages.length - 50).concat([text])
+          this.state.messages.length > 49 ?
+            this.state.messages.slice(this.state.messages.length - 49, this.state.messages.length).concat([text])
             : this.state.messages.concat([text]);
+        
+        console.log(messages.length);
         this.setState({ messages });
       });
 
@@ -77,12 +80,15 @@ class ChatRoom extends React.Component {
         />
 
         <button className="login-btn chat-send-btn" onClick={this.sendMessage}>Send</button>
-        <span className="login-label">Logged in as: <label>{this.props.user.userName}</label></span>
+        <span className="login-label">Logged in as: <label>{this.props.user.userName}</label>
+        <Link onClick={() => localStorage.removeItem('user')} className="logout-label" to="/login">Logout</Link>
+        </span>
         <div>
           {this.state.messages.map((message, index) => (
             <span style={{ display: 'block' }} key={index}>{index + 1}. {message}</span>
           ))}
         </div>
+        
       </div>
     );
   }

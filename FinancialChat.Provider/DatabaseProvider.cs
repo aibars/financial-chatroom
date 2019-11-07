@@ -25,7 +25,7 @@ namespace FinancialChat.Providers
         public async Task SaveMessage(Guid senderId, string message)
         {
             //1. Count number of saved messages
-            if(await _context.Messages.CountAsync() > 50)
+            if(await _context.Messages.CountAsync() >= 50)
             {
                 //2. Get the oldest message and remove
                 var oldestMsg = (await _context.Messages.ToListAsync()).OrderBy(x => x.SendDate).First();
