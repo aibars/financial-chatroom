@@ -96,7 +96,7 @@ namespace FinancialChat.Web
                         // If the request is for our hub...
                         var path = context.HttpContext.Request.Path;
                         if (!string.IsNullOrEmpty(accessToken) &&
-                            (path.StartsWithSegments("/api/chat")))
+                            (path.StartsWithSegments("/chathub")))
                         {
                             // Read the token out of the query string
                             context.Token = accessToken;
@@ -138,6 +138,8 @@ namespace FinancialChat.Web
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -157,8 +159,6 @@ namespace FinancialChat.Web
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
-
-            app.UseAuthentication();
         }
     }
 }

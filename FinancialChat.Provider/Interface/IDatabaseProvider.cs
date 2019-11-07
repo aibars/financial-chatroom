@@ -10,7 +10,5 @@ namespace FinancialChat.Providers.Interface
         Task<ApplicationUser> GetUser(string username);
 
         Task SaveMessage(Guid senderId, MessageModel message);
-
-        Task SaveMessage(MessageModel message);
     }
 }

@@ -17,7 +17,9 @@ class ChatRoom extends React.Component {
 
   componentDidMount = () => {
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl(`/chathub?token=${JSON.parse(localStorage.getItem('user')).token}`)
+      .withUrl('/chathub', {
+        accessTokenFactory: () => JSON.parse(localStorage.getItem('user')).token
+      })
       .configureLogging(signalR.LogLevel.Information)
       .build();
 

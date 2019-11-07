@@ -32,18 +32,6 @@ namespace FinancialChat.Providers
             });
 
             await _context.SaveChangesAsync();
-        }
-
-        public async Task SaveMessage(MessageModel message)
-        {
-            await _context.Messages.AddAsync(new Message
-            {
-                Text = message.Message,
-                SendDate = message.SendDate,
-                BotName = "FinancialBot"
-            });
-
-            await _context.SaveChangesAsync();
-        }
+        }       
     }
 }
