@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -25,13 +26,14 @@ namespace FinancialChat.Bot
                     while (!reader.EndOfStream)
                     {
                         var line = reader.ReadLine();
-                        var values = line.Split(';');
+                        var values = line.Split(',');
 
                         csvValues.Add(values[3]);
                     }
                 }
 
-                return $"{stockCode.ToUpper()} quote is ${csvValues.First()}";
+                var high = decimal.Parse(csvValues.Skip(1).First(), CultureInfo.InvariantCulture);
+                return $"{stockCode.ToUpper()} quote is ${high}";
             }
             catch
             {

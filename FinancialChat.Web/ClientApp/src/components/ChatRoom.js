@@ -34,14 +34,21 @@ class ChatRoom extends React.Component {
         .catch(err => console.log('Error while establishing connection.'));
 
       this.state.hubConnection.on('sendToAll', (username, receivedMessage) => {
-        console.log('send method reached');
         const text = `${username}: ${receivedMessage}`;
+        const messages =
+          this.state.messages.length > 50 ?
+            this.state.messages.slice(this.state.messages.length - 50).concat([text])
+            : this.state.messages.concat([text]);
+        this.setState({ messages });
+      });
+
+      this.state.hubConnection.on('sendToAllFromBot', (receivedMessage) => {
+        const text = `FinancialBot: ${receivedMessage}`;
         const messages = this.state.messages.concat([text]);
         this.setState({ messages });
       });
     });
   }
-
 
   handleKeyPress = (e) => {
     if (e.charCode === 13) {

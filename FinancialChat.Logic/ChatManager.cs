@@ -19,7 +19,7 @@ namespace FinancialChat.Logic
 
         public string GetResponseFromBot(string quote)
         {
-            var response = _botClient.Call("30");
+            var response = _botClient.Call(quote);
 
             _botClient.Close();
             return response;
@@ -28,6 +28,7 @@ namespace FinancialChat.Logic
         public async Task SaveMessage(string message, string username)
         {
             var user = await _databaseProvider.GetUser(username) ?? throw new ArgumentException("Error obtaining user from the database");
+            
             await _databaseProvider.SaveMessage(user.Id, message);
         }
     }

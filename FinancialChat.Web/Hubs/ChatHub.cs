@@ -35,11 +35,11 @@ namespace FinancialChat.Web.Hubs
             }
             else
             {
-                var quote = new Regex("/stock=(.+)").Match(message).Groups[0].Value;
+                var quote = new Regex("/stock=(.+)").Match(message).Groups[1].Value;
 
                 var quoteResponse = _chatManager.GetResponseFromBot(quote);
 
-                await Clients.Group("chatroom").SendAsync("sendToAllFromBot", quoteResponse);
+                await Clients.All.SendAsync("sendToAllFromBot", quoteResponse);
             }
         }
     }
