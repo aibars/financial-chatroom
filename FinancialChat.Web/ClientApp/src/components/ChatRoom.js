@@ -44,8 +44,8 @@ class ChatRoom extends React.Component {
         var items = this.state.messages;
         const messages =
           items.length > 49 ?
-            items.slice(items.length - 49, items.length).concat([{ text: receivedMessage, userName: username, sendDate: this.getCurrentTime() }])
-            : items.concat([{ text: receivedMessage, userName: username, sendDate: this.getCurrentTime() }]);
+            items.slice(items.length - 49, items.length).concat([{ text: receivedMessage, userName: username, sendDate: getCurrentTime() }])
+            : items.concat([{ text: receivedMessage, userName: username, sendDate: getCurrentTime() }]);
         this.setState({ messages: messages });
       });
 
@@ -53,15 +53,11 @@ class ChatRoom extends React.Component {
         var items = this.state.messages;
         const messages =
           items.length > 49 ?
-            items.slice(items.length - 49, items.length).concat([{ text: receivedMessage, userName: 'FinancialBot', sendDate: this.getCurrentTime() }])
-            : items.concat([{ text: receivedMessage, userName: 'FinancialBot', sendDate: this.getCurrentTime() }]);
+            items.slice(items.length - 49, items.length).concat([{ text: receivedMessage, userName: 'FinancialBot', sendDate: getCurrentTime() }])
+            : items.concat([{ text: receivedMessage, userName: 'FinancialBot', sendDate: getCurrentTime() }]);
         this.setState({ messages: messages });
       });
     });
-  }
-
-  getCurrentTime() {
-    return new Date().toISOString();
   }
 
   handleKeyPress = (e) => {
@@ -98,7 +94,7 @@ class ChatRoom extends React.Component {
         <div>
           {this.state.messages.map((item, index) => (
             <span className={"chat-line-" + (index % 2 === 0 ? "even" : "odd")}
-              key={index}>{item.userName}: {item.text}  <label className="send-date">{moment(item.sendDate).format('YYYY/DD/MM hh:mm')}</label>
+              key={index}>{item.userName}: {item.text}  <label className="send-date">{isToday(item.sendDate) ? moment(item.sendDate).format('hh:mm') : moment(item.sendDate).format('YYYY/DD/MM hh:mm')}</label>
             </span>
           ))}
         </div>
@@ -114,3 +110,14 @@ const connectedRoom = connect((state) => {
 })(ChatRoom);
 
 export { connectedRoom as ChatRoom };
+
+const getCurrentTime = () => {
+  return new Date().toISOString();
+}
+const isToday = (input) => {
+  const today = new Date();
+  const dateInput = new Date(input);
+  return dateInput.getDate() === today.getDate() &&
+    dateInput.getMonth() === today.getMonth() &&
+    dateInput.getFullYear() === today.getFullYear();
+}
