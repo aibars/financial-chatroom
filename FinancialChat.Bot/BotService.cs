@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace FinancialChat.Bot
@@ -33,7 +31,7 @@ namespace FinancialChat.Bot
                 }
 
                 var high = decimal.Parse(csvValues.Skip(1).First(), CultureInfo.InvariantCulture);
-                return $"{stockCode.ToUpper()} quote is ${high}";
+                return $"{stockCode.ToUpper()} quote is ${high.ToString(CultureInfo.InvariantCulture)}";
             }
             catch
             {

@@ -5,6 +5,6 @@ namespace FinancialChat.Logic.Interface
 {
     public interface ITokenService
     {
-        JsonWebToken GenerateJwtToken(string email, ApplicationUser user);
+        JsonWebToken GenerateJwtToken(ApplicationUser user);
     }
 }

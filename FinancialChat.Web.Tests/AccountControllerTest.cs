@@ -50,7 +50,7 @@ namespace FinancialChat.Web.Tests
             _userManager = new FakeUserManager(_userStore, users);
             _signInManager = new FakeSignInManager(_userStore, users, Microsoft.AspNetCore.Identity.SignInResult.Success);
 
-            _tokenService.Setup(x => x.GenerateJwtToken(It.IsAny<string>(), It.IsAny<ApplicationUser>())).Returns(new Logic.Models.JsonWebToken("123", 1));
+            _tokenService.Setup(x => x.GenerateJwtToken(It.IsAny<ApplicationUser>())).Returns(new Logic.Models.JsonWebToken("123", 1));
             _mapper.Setup(x => x.Map<LoggedInUserDto>(It.IsAny<ApplicationUser>())).Returns(loggedInUser);
 
             var controller = new AccountController(_userManager, _signInManager, _mapper.Object, _tokenService.Object);
@@ -84,7 +84,7 @@ namespace FinancialChat.Web.Tests
             _userManager = new FakeUserManager(_userStore, users);
             _signInManager = new FakeSignInManager(_userStore, users, Microsoft.AspNetCore.Identity.SignInResult.Failed);
 
-            _tokenService.Setup(x => x.GenerateJwtToken(It.IsAny<string>(), It.IsAny<ApplicationUser>())).Returns(new Logic.Models.JsonWebToken("123", 1));
+            _tokenService.Setup(x => x.GenerateJwtToken(It.IsAny<ApplicationUser>())).Returns(new Logic.Models.JsonWebToken("123", 1));
             _mapper.Setup(x => x.Map<LoggedInUserDto>(It.IsAny<ApplicationUser>())).Returns(loggedInUser);
 
             var controller = new AccountController(_userManager, _signInManager, _mapper.Object, _tokenService.Object);
@@ -121,7 +121,7 @@ namespace FinancialChat.Web.Tests
 
             _signInManager = new FakeSignInManager(_userStore, users, Microsoft.AspNetCore.Identity.SignInResult.Success);
 
-            _tokenService.Setup(x => x.GenerateJwtToken(It.IsAny<string>(), It.IsAny<ApplicationUser>())).Returns(new Logic.Models.JsonWebToken("123", 1));
+            _tokenService.Setup(x => x.GenerateJwtToken(It.IsAny<ApplicationUser>())).Returns(new Logic.Models.JsonWebToken("123", 1));
             _mapper.Setup(x => x.Map<ApplicationUser>(It.IsAny<RegisterRequestDto>())).Returns(appUser);
             _mapper.Setup(x => x.Map<LoggedInUserDto>(It.IsAny<ApplicationUser>())).Returns(loggedInUser);
 
@@ -163,7 +163,7 @@ namespace FinancialChat.Web.Tests
 
             _signInManager = new FakeSignInManager(_userStore, users, Microsoft.AspNetCore.Identity.SignInResult.Failed);
 
-            _tokenService.Setup(x => x.GenerateJwtToken(It.IsAny<string>(), It.IsAny<ApplicationUser>())).Returns(new Logic.Models.JsonWebToken("123", 1));
+            _tokenService.Setup(x => x.GenerateJwtToken(It.IsAny<ApplicationUser>())).Returns(new Logic.Models.JsonWebToken("123", 1));
             _mapper.Setup(x => x.Map<ApplicationUser>(It.IsAny<RegisterRequestDto>())).Returns(appUser);
             _mapper.Setup(x => x.Map<LoggedInUserDto>(It.IsAny<ApplicationUser>())).Returns(loggedInUser);
 

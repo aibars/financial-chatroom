@@ -18,7 +18,7 @@ namespace FinancialChat.Logic
             _configuration = configuration;
         }
 
-        public JsonWebToken GenerateJwtToken(string email, ApplicationUser user)
+        public JsonWebToken GenerateJwtToken(ApplicationUser user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 

@@ -11,7 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace FinancialChat.Providers.Tests
+namespace FinancialChat.Web.Tests
 {
     public class MessagesControllerTest
     {

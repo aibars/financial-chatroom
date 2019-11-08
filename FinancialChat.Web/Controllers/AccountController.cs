@@ -53,7 +53,7 @@ namespace FinancialChat.Web
             }
             else
             {
-                var jsonWebToken = _tokenService.GenerateJwtToken(model.UserName, user);
+                var jsonWebToken = _tokenService.GenerateJwtToken(user);
 
                 var requestedAt = DateTime.UtcNow;
 
@@ -84,7 +84,7 @@ namespace FinancialChat.Web
             {
                 await _signInManager.SignInAsync(appUser, isPersistent: false);
 
-                return Ok(_tokenService.GenerateJwtToken(appUser.UserName, appUser));
+                return Ok(_tokenService.GenerateJwtToken(appUser));
             }
             else
             {
