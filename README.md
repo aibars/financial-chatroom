@@ -1,6 +1,6 @@
 # Financial Chat
 
-Simple browser-based chatroom app that supports requesting financial data from the Stooq API by using the command `/stock=stock_code`
+Simple browser-based chatroom app that supports requesting financial data from the [Stooq](https://stooq.pl/) API by using the command `/stock=stock_code`
 
 ### Setup
 

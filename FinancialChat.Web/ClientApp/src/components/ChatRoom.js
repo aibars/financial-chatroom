@@ -61,7 +61,7 @@ class ChatRoom extends React.Component {
   }
 
   getCurrentTime() {
-    return moment().format('YYYY/DD/MM hh:mm');
+    return new Date().toISOString();
   }
 
   handleKeyPress = (e) => {
@@ -82,21 +82,24 @@ class ChatRoom extends React.Component {
   render() {
     return (
       <div className="chat-input-box">
-        <br />
-        <input className="login-input"
-          type="text"
-          onKeyPress={this.handleKeyPress}
-          value={this.state.message}
-          onChange={e => this.setState({ message: e.target.value })}
-        />
+        <div id="status-line">
+          <input className="login-input"
+            type="text"
+            onKeyPress={this.handleKeyPress}
+            value={this.state.message}
+            onChange={e => this.setState({ message: e.target.value })}
+          />
 
-        <button className="login-btn chat-send-btn" onClick={this.sendMessage}>Send</button>
-        <span className="login-label">Logged in as: <label>{this.props.user.userName}</label>
-          <Link onClick={() => localStorage.removeItem('user')} className="logout-label" to="/login">Logout</Link>
-        </span>
+          <button className="login-btn chat-send-btn" onClick={this.sendMessage}>Send</button>
+          <span className="login-label">Logged in as: <label>{this.props.user.userName}</label>
+            <Link onClick={() => localStorage.removeItem('user')} className="logout-label" to="/login">Logout</Link>
+          </span>
+        </div>
         <div>
           {this.state.messages.map((item, index) => (
-            <span style={{ display: 'block' }} key={index}>{index + 1}. {item.userName}: {item.text} - {moment(item.sendDate).format('YYYY/DD/MM hh:mm')}</span>
+            <span className={"chat-line-" + (index % 2 === 0 ? "even" : "odd")}
+              key={index}>{item.userName}: {item.text}  <label className="send-date">{moment(item.sendDate).format('YYYY/DD/MM hh:mm')}</label>
+            </span>
           ))}
         </div>
       </div>

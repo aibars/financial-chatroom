@@ -17,7 +17,7 @@
   }
 
 .chat-input-box {
-    margin-left: 20px;
+    margin: 0 20px 0 20px;
   }
 
 .chat-send-btn {
@@ -32,4 +32,23 @@
   float: right;
   margin-top: 20px;
   margin-right: 20px;
+}
+
+.send-date {
+  font-size: 12px;
+  color: #331a00; 
+}
+
+.chat-line-even {
+  display: block;
+  background-color: #70a1ff;
+}
+
+.chat-line-odd {
+  display: block;
+  background-color: #ccdeff;
+}
+
+#status-line {
+  margin-bottom: 20px;
 }
