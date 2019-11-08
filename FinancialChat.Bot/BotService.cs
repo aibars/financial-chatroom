@@ -9,6 +9,9 @@ namespace FinancialChat.Bot
 {
     public class BotService
     {
+        /// <summary>
+        /// Downloads a CSV from the Stooq service and obtains the stock value from it.
+        /// </summary>
         public async Task<string> ProcessCSVFromExternalService(string stockCode)
         {
             try

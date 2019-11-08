@@ -8,6 +8,9 @@ namespace FinancialChat.Web.Mappings
 {
     public class MappingProfile : Profile
     {
+        /// <summary>
+        /// Mapping settings
+        /// </summary>
         public MappingProfile()
         {
             CreateMap<ApplicationUser, LoggedInUserDto>();

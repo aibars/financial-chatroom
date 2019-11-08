@@ -22,7 +22,7 @@ namespace FinancialChat.Web.Hubs
         }
 
         /// <summary>
-        /// Saves the message into the db and sends it via the SignalR socket
+        /// Saves the message into the database and sends it via the SignalR socket
         /// </summary>
         public async Task Send(string message)
         {

@@ -22,6 +22,9 @@ namespace FinancialChat.Web.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Obtains all messages from the database
+        /// </summary>
         public async Task<List<MessageDto>> GetRoomMessages()
         {
             var messages = await _databaseProvider.GetMessages();

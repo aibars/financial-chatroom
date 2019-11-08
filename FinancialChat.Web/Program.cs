@@ -19,6 +19,9 @@ namespace FinancialChat.Web
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>();
 
+        /// <summary>
+        /// Automatically migrates the database when the app starts.
+        /// </summary>
         public static IWebHost MigrateDatabase(this IWebHost webHost)
         {
             var serviceScopeFactory = (IServiceScopeFactory)webHost.Services.GetService(typeof(IServiceScopeFactory));

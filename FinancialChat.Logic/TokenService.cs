@@ -10,6 +10,9 @@ using System.Text;
 
 namespace FinancialChat.Logic
 {
+    /// <summary>
+    /// Contain methods for generating authorization tokens
+    /// </summary>
     public class TokenService : ITokenService
     {
         private readonly IOptions<TokenOptions> _configuration;
@@ -18,6 +21,9 @@ namespace FinancialChat.Logic
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Generates a JSON Web Token by providing an authenticated user.
+        /// </summary>
         public JsonWebToken GenerateJwtToken(ApplicationUser user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();

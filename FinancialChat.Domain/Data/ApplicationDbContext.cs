@@ -5,6 +5,9 @@ using System;
 
 namespace FinancialChat.Domain.Data
 {
+    /// <summary>
+    /// EF Context
+    /// </summary>
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, AppRole, Guid>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)

@@ -32,6 +32,9 @@ namespace FinancialChat.Web
             _tokenService = tokenService;
         }
 
+        /// <summary>
+        /// Generates the Bearer token for the user in the request
+        /// </summary>
         [HttpPost("login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody]LoginRequestDto model)
@@ -67,6 +70,9 @@ namespace FinancialChat.Web
             }
         }
 
+        /// <summary>
+        /// Registers a new user by receiving a username and a password
+        /// </summary>
         [HttpPost("register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody]RegisterRequestDto model)

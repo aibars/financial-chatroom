@@ -44,6 +44,9 @@ namespace FinancialChat.Logic
             };
         }
 
+        /// <summary>
+        /// Makes an RPC call to obtain a response from the bot service
+        /// </summary>
         public string Call(string message)
         {
             var messageBytes = Encoding.UTF8.GetBytes(message);
@@ -61,6 +64,9 @@ namespace FinancialChat.Logic
             return respQueue.Take();
         }
 
+        /// <summary>
+        /// Closes the message connection
+        /// </summary>
         public void Close()
         {
             connection.Close();

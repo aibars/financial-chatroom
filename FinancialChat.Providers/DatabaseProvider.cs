@@ -9,6 +9,9 @@ using System.Collections.Generic;
 
 namespace FinancialChat.Providers
 {
+    /// <summary>
+    /// Methods for accessing the database
+    /// </summary>
     public class DatabaseProvider : IDatabaseProvider
     {
         protected readonly ApplicationDbContext _context;
@@ -17,17 +20,27 @@ namespace FinancialChat.Providers
             _context = context;
         }
 
+        /// <summary>
+        /// Obtains all Messages, ordered by send data and including the associated user.
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<Message>> GetMessages()
         {
             return await _context.Messages.Include(y => y.SenderUser).OrderBy(x => x.SendDate).ToListAsync();
         }
 
+        /// <summary>
+        /// Obtains a user by username
+        /// </summary>
         public async Task<ApplicationUser> GetUser(string username)
         {
             return await _context.Users
                 .FirstOrDefaultAsync(x => x.UserName == username);
         }
 
+        /// <summary>
+        /// Saves a message after it has been posted in the chatroom
+        /// </summary>
         public async Task SaveMessage(Guid senderId, string message)
         {
             //1. Count number of saved messages
