@@ -1,10 +1,13 @@
 import { service } from './services';
 import { history } from './history';
 
-const userConstants = {
-    LOGIN_REQUEST: 'USERS_LOGIN_REQUEST',
-    LOGIN_SUCCESS: 'USERS_LOGIN_SUCCESS',
-    LOGIN_FAILURE: 'USERS_LOGIN_FAILURE',
+const constants = {
+    LOGIN_REQUEST: 'LOGIN_REQUEST',
+    LOGIN_SUCCESS: 'LOGIN_SUCCESS',
+    LOGIN_FAILURE: 'LOGIN_FAILURE',
+    GET_MESSAGES_REQUEST: 'GET_MESSAGES_REQUEST',
+    GET_MESSAGES_SUCCESS: 'GET_MESSAGES_SUCCESS',
+    GET_MESSAGES_FAILURE: 'GET_MESSAGES_FAILURE',
 };
 
 export function login(username, password) {
@@ -22,8 +25,41 @@ export function login(username, password) {
                 }
             );
 
-        function request(user) { return { type: userConstants.LOGIN_REQUEST, user } }
-        function success(user) { return { type: userConstants.LOGIN_SUCCESS, user } }
-        function failure(error) { return { type: userConstants.LOGIN_FAILURE, error } }
+        function request(user) {
+            return { type: constants.LOGIN_REQUEST, user }
+        }
+
+        function success(user) {
+            return { type: constants.LOGIN_SUCCESS, user }
+        }
+
+        function failure(error) {
+            return { type: constants.LOGIN_FAILURE, error }
+        }
     };
+}
+
+export function getMessages() {
+    return dispatch => {
+        dispatch(request());
+
+        service.getMessages()
+            .then(
+                messages => dispatch(success(messages)),
+                error => dispatch(failure(error.toString()))
+            );
+    };
+
+    function request() {
+        return { type: constants.GET_MESSAGES_REQUEST }
+    }
+
+    function success(messages) {
+        return { type: constants.GET_MESSAGES_SUCCESS, messages }
+    }
+
+    function failure(error) {
+        return { type: constants.GET_MESSAGES_FAILURE, error }
+    }
+
 }

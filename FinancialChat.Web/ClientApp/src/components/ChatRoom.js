@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import * as signalR from '@aspnet/signalr';
 import { Link } from 'react-router-dom';
 import '../styles/ChatRoom.css';
+import { service } from '../services';
+import moment from 'moment';
 
 class ChatRoom extends React.Component {
   constructor(props) {
@@ -11,8 +13,8 @@ class ChatRoom extends React.Component {
     this.state = {
       username: '',
       message: '',
-      messages: [],
       hubConnection: null,
+      messages: [],
     };
 
     this.sendMessage = this.sendMessage.bind(this);
@@ -20,7 +22,6 @@ class ChatRoom extends React.Component {
   }
 
   componentDidMount = () => {
-
     const connection = new signalR.HubConnectionBuilder()
       .withUrl('/chathub', {
         accessTokenFactory: () => this.props.user.token
@@ -28,29 +29,39 @@ class ChatRoom extends React.Component {
       .configureLogging(signalR.LogLevel.Information)
       .build();
 
+    service.getMessages()
+      .then(
+        messages => this.setState({ messages: messages })
+      );
+
     this.setState({ hubConnection: connection }, () => {
       this.state.hubConnection
         .start()
         .then(() => console.log('Connection started.'))
-        .catch(err => console.log('Error while establishing connection.'));
+        .catch(() => console.log('Error while establishing connection.'));
 
       this.state.hubConnection.on('sendToAll', (username, receivedMessage) => {
-        const text = `${username}: ${receivedMessage}`;
+        var items = this.state.messages;
         const messages =
-          this.state.messages.length > 49 ?
-            this.state.messages.slice(this.state.messages.length - 49, this.state.messages.length).concat([text])
-            : this.state.messages.concat([text]);
-        
-        console.log(messages.length);
-        this.setState({ messages });
+          items.length > 49 ?
+            items.slice(items.length - 49, items.length).concat([{ text: receivedMessage, userName: username, sendDate: this.getCurrentTime() }])
+            : items.concat([{ text: receivedMessage, userName: username, sendDate: this.getCurrentTime() }]);
+        this.setState({ messages: messages });
       });
 
       this.state.hubConnection.on('sendToAllFromBot', (receivedMessage) => {
-        const text = `FinancialBot: ${receivedMessage}`;
-        const messages = this.state.messages.concat([text]);
-        this.setState({ messages });
+        var items = this.state.messages;
+        const messages =
+          items.length > 49 ?
+            items.slice(items.length - 49, items.length).concat([{ text: receivedMessage, userName: 'FinancialBot', sendDate: this.getCurrentTime() }])
+            : items.concat([{ text: receivedMessage, userName: 'FinancialBot', sendDate: this.getCurrentTime() }]);
+        this.setState({ messages: messages });
       });
     });
+  }
+
+  getCurrentTime() {
+    return moment().format('YYYY/DD/MM hh:mm');
   }
 
   handleKeyPress = (e) => {
@@ -81,22 +92,22 @@ class ChatRoom extends React.Component {
 
         <button className="login-btn chat-send-btn" onClick={this.sendMessage}>Send</button>
         <span className="login-label">Logged in as: <label>{this.props.user.userName}</label>
-        <Link onClick={() => localStorage.removeItem('user')} className="logout-label" to="/login">Logout</Link>
+          <Link onClick={() => localStorage.removeItem('user')} className="logout-label" to="/login">Logout</Link>
         </span>
         <div>
-          {this.state.messages.map((message, index) => (
-            <span style={{ display: 'block' }} key={index}>{index + 1}. {message}</span>
+          {this.state.messages.map((item, index) => (
+            <span style={{ display: 'block' }} key={index}>{index + 1}. {item.userName}: {item.text} - {moment(item.sendDate).format('YYYY/DD/MM hh:mm')}</span>
           ))}
         </div>
-        
       </div>
     );
   }
 }
 
 const connectedRoom = connect((state) => {
-  const { authentication } = state;
+  const { authentication, messages } = state;
   const { user } = authentication;
-  return { user };
+  return { user, messages };
 })(ChatRoom);
+
 export { connectedRoom as ChatRoom };

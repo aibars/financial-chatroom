@@ -1,5 +1,8 @@
+import { authHeader } from './auth-header';
+
 export const service = {
-    login
+    login,
+    getMessages
 };
 
 function login(username, password) {
@@ -9,10 +12,9 @@ function login(username, password) {
         body: JSON.stringify({ username, password })
     };
 
-    return fetch('https://localhost:5001/api/Account/login', requestOptions)
+    return fetch('/api/Account/login', requestOptions)
         .then(handleResponse)
         .then(user => {
-            // store user details and jwt token in local storage to keep user logged in between page refreshes
             localStorage.setItem('user', JSON.stringify(user));
 
             return user;
@@ -33,4 +35,14 @@ function handleResponse(response) {
 
         return data;
     });
+}
+
+function getMessages() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader(),
+    };
+
+    return fetch('/api/messages', requestOptions)
+        .then(handleResponse);
 }

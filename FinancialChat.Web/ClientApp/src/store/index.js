@@ -1,27 +1,48 @@
 let user = JSON.parse(localStorage.getItem('user'));
-const initialState = user ? { loggedIn: true, user } : {};
+const initialState = user ? {
+  loggedIn: true,
+  user
+} : {};
 
-const userConstants = {
-  LOGIN_REQUEST: 'USERS_LOGIN_REQUEST',
-  LOGIN_SUCCESS: 'USERS_LOGIN_SUCCESS',
-  LOGIN_FAILURE: 'USERS_LOGIN_FAILURE',
+const constants = {
+  LOGIN_REQUEST: 'LOGIN_REQUEST',
+  LOGIN_SUCCESS: 'LOGIN_SUCCESS',
+  LOGIN_FAILURE: 'LOGIN_FAILURE',
+  GET_MESSAGES_SUCCESS: 'GET_MESSAGES_SUCCESS',
+  GET_MESSAGES_FAILURE: 'GET_MESSAGES_FAILURE',
+  GET_MESSAGES_REQUEST: 'GET_MESSAGES_REQUEST'
 };
 
 export function authentication(state = initialState, action) {
   switch (action.type) {
-    case userConstants.LOGIN_REQUEST:
+    case constants.LOGIN_REQUEST:
       return {
         loggingIn: true,
         user: action.user
       };
-    case userConstants.LOGIN_SUCCESS:
+    case constants.LOGIN_SUCCESS:
       return {
         loggedIn: true,
         user: action.user
       };
-    case userConstants.LOGIN_FAILURE:
+    case constants.LOGIN_FAILURE:
       return {};
     default:
       return state
+  }
+}
+
+export function messages(state = { items: [] }, action) {
+  switch (action.type) {
+    case constants.GET_MESSAGES_REQUEST:
+      return { items: [] };
+    case constants.GET_MESSAGES_SUCCESS:
+      return {
+        items: action.messages,
+      };
+    case constants.GET_MESSAGES_FAILURE:
+      return { items: [] };
+    default:
+      return state;
   }
 }
