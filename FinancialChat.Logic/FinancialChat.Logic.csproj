@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FinancialChat.Domain\FinancialChat.Domain.csproj" />
-    <ProjectReference Include="..\FinancialChat.Provider\FinancialChat.Providers.csproj" />
+    <ProjectReference Include="..\FinancialChat.Providers\FinancialChat.Providers.csproj" />
   </ItemGroup>
 
   <ItemGroup>

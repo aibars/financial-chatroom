@@ -39,7 +39,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FinancialChat.Domain\FinancialChat.Domain.csproj" />
     <ProjectReference Include="..\FinancialChat.Logic\FinancialChat.Logic.csproj" />
-    <ProjectReference Include="..\FinancialChat.Provider\FinancialChat.Providers.csproj" />
+    <ProjectReference Include="..\FinancialChat.Providers\FinancialChat.Providers.csproj" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

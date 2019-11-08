@@ -17,7 +17,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -48,7 +47,7 @@ namespace FinancialChat.Web
             services.AddScoped<ITokenService, TokenService>();
             services.AddDbContext<ApplicationDbContext>(options =>
              options.UseNpgsql(ConnectionString));
-            
+
             services.AddScoped<IChatHub, ChatHub>();
             services.AddScoped<IChatManager, ChatManager>();
             services.AddScoped<IBotClient, BotClient>();
