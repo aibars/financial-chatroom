@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace FinancialChat.Providers
 {
@@ -16,6 +17,11 @@ namespace FinancialChat.Providers
             _context = context;
         }
 
+        public async Task<List<Message>> GetMessages()
+        {
+            return await _context.Messages.Include(y => y.SenderUser).OrderBy(x => x.SendDate).ToListAsync();
+        }
+
         public async Task<ApplicationUser> GetUser(string username)
         {
             return await _context.Users
@@ -25,9 +31,9 @@ namespace FinancialChat.Providers
         public async Task SaveMessage(Guid senderId, string message)
         {
             //1. Count number of saved messages
-            if(await _context.Messages.CountAsync() >= 50)
+            if (await _context.Messages.CountAsync() >= 50)
             {
-                //2. Get the oldest message and remove
+                //2. Get the oldest message and remove it
                 var oldestMsg = (await _context.Messages.ToListAsync()).OrderBy(x => x.SendDate).First();
                 _context.Messages.Remove(oldestMsg);
                 await _context.SaveChangesAsync();
@@ -36,11 +42,11 @@ namespace FinancialChat.Providers
             await _context.Messages.AddAsync(new Message
             {
                 Text = message,
-                SendDate = DateTime.UtcNow,
+                SendDate = DateTime.Now,
                 SenderUserId = senderId
             });
 
             await _context.SaveChangesAsync();
-        }       
+        }
     }
 }
