@@ -53,6 +53,6 @@ with the following body\
 		"password": <password>
 	}
 	```
-	After that, you should be able to log in via the UI or make other API calls with the obtained beared token.
+	After that, you should be able to log in via the UI or make other API calls with the obtained Bearer token.
 
-4. Finally, go to either localhost:5001 or localhost:5001 to access the chatroom application. 
+4. Finally, go to either https://localhost:5001/ or https://localhost:5001/ to access the chatroom application. 
