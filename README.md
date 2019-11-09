@@ -16,7 +16,7 @@ In order to run this application, the following tools are required:
 After you have installed PostgreSQL from its [official site](https://www.postgresql.org/download/) and configured the server, create a database called `chatroom`.
 In a new terminal, access the `psql` CLI and execute\
 `CREATE DATABASE chatroom;`\
-No further steps are required as the tables and relationships should be automatically created by the Entity Framework code-first migrations. Of course, migrataions can be run manually at any time by running `dotnet-ef database update` after navigating to the `FinancialChat.Domain` class library project.
+No further steps are required as the tables and relationships should be automatically created by the Entity Framework code-first migrations. Of course, migrations could be manually run at any time by executing `dotnet-ef database update` after navigating to the `FinancialChat.Domain` folder.
 
 #### Node.js
 
