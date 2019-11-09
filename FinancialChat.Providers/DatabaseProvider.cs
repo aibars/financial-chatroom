@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
 namespace FinancialChat.Providers
 {
@@ -15,9 +16,12 @@ namespace FinancialChat.Providers
     public class DatabaseProvider : IDatabaseProvider
     {
         protected readonly ApplicationDbContext _context;
-        public DatabaseProvider(ApplicationDbContext context)
+        protected readonly IConfiguration _configuration;
+
+        public DatabaseProvider(ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -57,6 +61,30 @@ namespace FinancialChat.Providers
                 Text = message,
                 SendDate = DateTime.Now,
                 SenderUserId = senderId
+            });
+
+            await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Saves the bot response
+        /// </summary>
+        public async Task SaveMessage(string message)
+        {
+            //1. Count number of saved messages
+            if (await _context.Messages.CountAsync() >= 50)
+            {
+                //2. Get the oldest message and remove it
+                var oldestMsg = (await _context.Messages.ToListAsync()).OrderBy(x => x.SendDate).First();
+                _context.Messages.Remove(oldestMsg);
+                await _context.SaveChangesAsync();
+            }
+
+            await _context.Messages.AddAsync(new Message
+            {
+                Text = message,
+                SendDate = DateTime.Now,
+                SenderBot = _configuration["BotName"]
             });
 
             await _context.SaveChangesAsync();

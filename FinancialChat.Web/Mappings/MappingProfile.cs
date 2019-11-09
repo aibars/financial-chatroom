@@ -16,7 +16,7 @@ namespace FinancialChat.Web.Mappings
             CreateMap<ApplicationUser, LoggedInUserDto>();
 
             CreateMap<Message, MessageDto>()
-                .ForMember(x => x.UserName, y => y.MapFrom(z => z.SenderUser.UserName));
+                .ForMember(x => x.UserName, y => y.MapFrom(z => z.SenderUser != null ? z.SenderUser.UserName : z.SenderBot));
 
             CreateMap<RegisterRequestDto, ApplicationUser>()
                .ForMember(x => x.LastLoginDate, y => y.MapFrom(z => DateTime.UtcNow))

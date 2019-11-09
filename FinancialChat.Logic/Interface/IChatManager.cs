@@ -7,6 +7,8 @@ namespace FinancialChat.Logic.Interface
     {
         Task SaveMessage(string message, string username);
 
+        Task SaveMessage(string message);
+
         string GetResponseFromBot(string quote); 
     }
 }

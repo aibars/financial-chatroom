@@ -4,6 +4,7 @@ using Xunit;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using Microsoft.Extensions.Configuration;
 
 namespace FinancialChat.Providers.Tests
 {
@@ -11,13 +12,20 @@ namespace FinancialChat.Providers.Tests
     {
         private readonly DatabaseProvider _databaseProvider;
         private readonly ApplicationDbContext _context;
+        private IConfiguration _config;
         public DatabaseProviderTest()
         {
+            var builder = new ConfigurationBuilder()
+                               .AddJsonFile("appSettings.json");
+
+            _config = builder.Build();
+
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                       .UseInMemoryDatabase(databaseName: "temp")
                       .Options;
             _context = new ApplicationDbContext(options);
-            _databaseProvider =  new DatabaseProvider(_context);
+
+            _databaseProvider = new DatabaseProvider(_context, _config);
         }
 
         public void Dispose()
@@ -58,7 +66,7 @@ namespace FinancialChat.Providers.Tests
         }
 
         [Fact]
-        public async Task SaveMessageTest()
+        public async Task SaveMessageForUserTest()
         {
             // Arrange
             _context.Users.AddRange(FakeData.GetUsers());
@@ -73,6 +81,23 @@ namespace FinancialChat.Providers.Tests
             // Assert
             Assert.NotNull(result);
             Assert.Equal(message, result.Text);
+        }
+
+        [Fact]
+        public async Task SaveMessageForBotTest()
+        {
+            // Arrange
+            var message = "aapl.us was $1";
+
+            // Act
+            await _databaseProvider.SaveMessage(message);
+            var result = _context.Messages.First(x => !x.SenderUserId.HasValue && x.Text.Equals(message));
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(message, result.Text);
+            Assert.Null(result.SenderUserId);
+            Assert.Equal(_config["BotName"], result.SenderBot);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace FinancialChat.Logic
         }
 
         /// <summary>
-        /// Saves the message in the database with its user
+        /// Saves the message in the database when it is sent by a user
         /// </summary>
         /// <param name="message">The text input</param>
         /// <param name="username">The user's unique identifier</param>
@@ -43,6 +43,16 @@ namespace FinancialChat.Logic
             var user = await _databaseProvider.GetUser(username) ?? throw new ArgumentException("Error obtaining user from the database");
             
             await _databaseProvider.SaveMessage(user.Id, message);
+        }
+
+        /// <summary>
+        /// Saves the message in the database when it is sent by the bot
+        /// </summary>
+        /// <param name="message">Bot Response</param>
+        /// <returns>An awaitable task</returns>
+        public async Task SaveMessage(string message)
+        {
+            await _databaseProvider.SaveMessage(message);
         }
     }
 }

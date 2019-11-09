@@ -13,6 +13,7 @@ namespace FinancialChat.Web.Hubs
     {
         protected readonly UserManager<ApplicationUser> _userManager;
         private readonly IChatManager _chatManager;
+        private readonly Regex regex = new Regex(@"\/stock=.+");
 
         public ChatHub(UserManager<ApplicationUser> userManager,
             IChatManager chatManager)
@@ -27,8 +28,8 @@ namespace FinancialChat.Web.Hubs
         public async Task Send(string message)
         {
             var username = Context.User.Identity.Name;
-
-            if (!message.Contains(@"/stock="))
+             
+            if (!regex.IsMatch(message))
             {
                 await Clients.All.SendAsync("sendToAll", username, message);
                 await _chatManager.SaveMessage(message, username);
@@ -40,6 +41,7 @@ namespace FinancialChat.Web.Hubs
                 var quoteResponse = _chatManager.GetResponseFromBot(quote);
 
                 await Clients.All.SendAsync("sendToAllFromBot", quoteResponse);
+                await _chatManager.SaveMessage(quoteResponse);
             }
         }
     }
